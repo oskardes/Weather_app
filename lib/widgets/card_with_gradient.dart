@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 
 class CardWithGradient extends StatelessWidget {
-  final Widget child;
   final double width;
   final Alignment beginAlignment;
   final Alignment endAlignment;
+  final EdgeInsets margin;
+  final EdgeInsets padding;
+  final Widget child;
 
   const CardWithGradient({
     Key? key,
-    required this.child,
     required this.width,
     required this.beginAlignment,
     required this.endAlignment,
+    required this.child,
+    required this.margin,
+    required this.padding,
   }) : super(key: key);
 
   @override
@@ -20,8 +24,8 @@ class CardWithGradient extends StatelessWidget {
       children: [
         Container(
             width: width,
-            margin: const EdgeInsets.all(18),
-            padding: const EdgeInsets.all(10),
+            margin: margin,
+            padding: padding,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(32),
               gradient: LinearGradient(
