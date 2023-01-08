@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/widgets/WhiteButton.dart';
 import 'package:weather_app/widgets/card_with_gradient.dart';
+import 'package:weather_app/widgets/weekly_listview.dart';
+import 'package:weather_app/widgets/white_button.dart';
+import 'package:weather_app/widgets/white_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -70,15 +72,15 @@ class _HomePageState extends State<HomePage> {
                           // padding: EdgeInsets.only(left: 7),
                           padding: EdgeInsets.zero,
                           margin: EdgeInsets.symmetric(vertical: 5),
-                          width: 50,
+                          width: 52,
                           beginAlignment: Alignment.topLeft,
                           endAlignment: Alignment.topLeft,
                           child: Text(
                             "Updating *",
                             style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.white,
-                            ),
+                                fontSize: 10,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ),
                         )
@@ -86,16 +88,10 @@ class _HomePageState extends State<HomePage> {
                     ),
                   )
                 ]),
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 15,
                   backgroundColor: Colors.white,
-                  child: IconButton(
-                    icon: Image.asset(
-                      "images/avatar.png",
-                      scale: 0.1,
-                    ),
-                    onPressed: null,
-                  ),
+                  backgroundImage: AssetImage('lib/images/avatar.png'),
                 ),
               ],
             ),
@@ -162,6 +158,33 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
+            ),
+            const WhiteCard(),
+            Container(
+              margin: const EdgeInsets.symmetric(
+                horizontal: 15,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text(
+                    'Weekly forecast',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  TextButton(
+                    onPressed: null,
+                    child: Text(
+                      'Next Month  >',
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 162, 30, 206)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              height: 140,
+              child: const WeeklyListView(realDay: 0),
             ),
           ],
         ),
