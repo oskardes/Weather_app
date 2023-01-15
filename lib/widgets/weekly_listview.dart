@@ -47,7 +47,7 @@ class WeeklyListView extends StatelessWidget {
                 Icons.cloud,
                 color: Colors.white,
               ),
-              const Text('18 C'),
+              const Text('18°C'),
               Container(
                 margin: const EdgeInsets.all(5),
                 width: 25,
@@ -100,7 +100,7 @@ class WeeklyListView extends StatelessWidget {
                 Icons.cloud,
                 color: Colors.white,
               ),
-              const Text('18 C'),
+              const Text('18°C'),
               Container(
                 margin: const EdgeInsets.all(5),
                 width: 25,
@@ -153,7 +153,7 @@ class WeeklyListView extends StatelessWidget {
                 Icons.cloud,
                 color: Colors.white,
               ),
-              const Text('18 C'),
+              const Text('18°C'),
               Container(
                 margin: const EdgeInsets.all(5),
                 width: 25,
@@ -206,7 +206,7 @@ class WeeklyListView extends StatelessWidget {
                 Icons.cloud,
                 color: Colors.white,
               ),
-              const Text('18 C'),
+              const Text('18°C'),
               Container(
                 margin: const EdgeInsets.all(5),
                 width: 25,
@@ -259,7 +259,7 @@ class WeeklyListView extends StatelessWidget {
                 Icons.cloud,
                 color: Colors.white,
               ),
-              const Text('18 C'),
+              const Text('18°C'),
               Container(
                 margin: const EdgeInsets.all(5),
                 width: 25,
@@ -312,7 +312,7 @@ class WeeklyListView extends StatelessWidget {
                 Icons.cloud,
                 color: Colors.white,
               ),
-              const Text('18 C'),
+              const Text('18°C'),
               Container(
                 margin: const EdgeInsets.all(5),
                 width: 25,
@@ -365,7 +365,7 @@ class WeeklyListView extends StatelessWidget {
                 Icons.cloud,
                 color: Colors.white,
               ),
-              const Text('18 C'),
+              const Text('18°C'),
               Container(
                 margin: const EdgeInsets.all(5),
                 width: 25,

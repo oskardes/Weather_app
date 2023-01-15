@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/models/weather_Info.dart';
 import 'package:weather_app/widgets/white_button.dart';
 
 class WhiteCard extends StatelessWidget {
+  final int? pressure;
+  final int? clouds;
+  final double? windSpeed;
+  final int? visibility;
+  final int? humidity;
+
   const WhiteCard({
     Key? key,
+    required this.pressure,
+    required this.clouds,
+    required this.windSpeed,
+    required this.humidity,
+    required this.visibility,
   }) : super(key: key);
 
   @override
@@ -48,26 +60,26 @@ class WhiteCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
-                    children: const [
-                      Icon(Icons.ac_unit_outlined),
-                      Text(
-                        'Real Feel',
+                    children: [
+                      const Icon(Icons.compress),
+                      const Text(
+                        'Pressure',
                         style: TextStyle(
                             color: Colors.grey,
                             fontSize: 11,
                             fontWeight: FontWeight.w600),
                       ),
                       Text(
-                        '23.8',
-                        style: TextStyle(
+                        '$pressure hPa',
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 12),
                       ),
                     ],
                   ),
                   Column(
-                    children: const [
-                      Icon(Icons.ac_unit_outlined),
-                      Text(
+                    children: [
+                      const Icon(Icons.air),
+                      const Text(
                         'Wind',
                         style: TextStyle(
                             color: Colors.grey,
@@ -75,25 +87,25 @@ class WhiteCard extends StatelessWidget {
                             fontWeight: FontWeight.w600),
                       ),
                       Text(
-                        '9 km/h',
-                        style: TextStyle(
+                        '$windSpeed m/h',
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 12),
                       ),
                     ],
                   ),
                   Column(
-                    children: const [
-                      Icon(Icons.ac_unit_outlined),
-                      Text(
-                        'SO2',
+                    children: [
+                      const Icon(Icons.cloud),
+                      const Text(
+                        'Clouds',
                         style: TextStyle(
                             color: Colors.grey,
                             fontSize: 11,
                             fontWeight: FontWeight.w600),
                       ),
                       Text(
-                        '0.9',
-                        style: TextStyle(
+                        '$clouds%',
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 12),
                       ),
                     ],
@@ -107,35 +119,35 @@ class WhiteCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
-                    children: const [
-                      Icon(Icons.ac_unit_outlined),
-                      Text(
-                        'Poss Rain ',
+                    children: [
+                      const Icon(Icons.water_drop_outlined),
+                      const Text(
+                        'Humidity ',
                         style: TextStyle(
                             color: Colors.grey,
                             fontSize: 11,
                             fontWeight: FontWeight.w600),
                       ),
                       Text(
-                        '68%',
-                        style: TextStyle(
+                        '$humidity%',
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 12),
                       ),
                     ],
                   ),
                   Column(
-                    children: const [
-                      Icon(Icons.ac_unit_outlined),
-                      Text(
-                        'UV Index',
+                    children: [
+                      const Icon(Icons.ac_unit_outlined),
+                      const Text(
+                        'Visibility',
                         style: TextStyle(
                             color: Colors.grey,
                             fontSize: 11,
                             fontWeight: FontWeight.w600),
                       ),
                       Text(
-                        '3',
-                        style: TextStyle(
+                        '$visibility m',
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 12),
                       ),
                     ],
