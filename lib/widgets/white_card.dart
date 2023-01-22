@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/models/weather_Info.dart';
 import 'package:weather_app/widgets/white_button.dart';
+
+import 'package:intl/intl.dart';
 
 class WhiteCard extends StatelessWidget {
   final int? pressure;
@@ -8,6 +9,13 @@ class WhiteCard extends StatelessWidget {
   final double? windSpeed;
   final int? visibility;
   final int? humidity;
+  final int? sunrise;
+  final int? sunset;
+
+  String convertDateTime(int utcTimestamp) {
+    var tempTime = DateTime.fromMillisecondsSinceEpoch(utcTimestamp * 1000);
+    return DateFormat.Hm().format(tempTime);
+  }
 
   const WhiteCard({
     Key? key,
@@ -16,6 +24,8 @@ class WhiteCard extends StatelessWidget {
     required this.windSpeed,
     required this.humidity,
     required this.visibility,
+    required this.sunrise,
+    required this.sunset,
   }) : super(key: key);
 
   @override
@@ -97,7 +107,7 @@ class WhiteCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.cloud),
                       const Text(
-                        'Clouds',
+                        'Cloudiness',
                         style: TextStyle(
                             color: Colors.grey,
                             fontSize: 11,
@@ -137,7 +147,7 @@ class WhiteCard extends StatelessWidget {
                   ),
                   Column(
                     children: [
-                      const Icon(Icons.ac_unit_outlined),
+                      const Icon(Icons.remove_red_eye),
                       const Text(
                         'Visibility',
                         style: TextStyle(
@@ -153,20 +163,32 @@ class WhiteCard extends StatelessWidget {
                     ],
                   ),
                   Column(
-                    children: const [
-                      Icon(Icons.ac_unit_outlined),
-                      Text(
-                        'O3',
-                        style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600),
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.wb_sunny_outlined),
+                          Text(
+                            '${convertDateTime(sunrise ?? 0)}',
+                            style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
                       ),
-                      Text(
-                        '50',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 12),
+                      const SizedBox(
+                        height: 5,
                       ),
+                      Row(children: [
+                        const Icon(Icons.mode_night_outlined),
+                        Text(
+                          '${convertDateTime(sunset ?? 0)}',
+                          style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ]),
                     ],
                   )
                 ],

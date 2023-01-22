@@ -1,3 +1,4 @@
+import 'package:weather_app/logic/geolocatization.dart';
 import 'package:weather_app/logic/http_Client.dart';
 import 'package:weather_app/models/weather_Info.dart';
 import 'package:weather_app/widgets/card_with_gradient.dart';
@@ -7,8 +8,6 @@ import 'package:weather_app/widgets/white_card.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:geolocator/geolocator.dart';
-import 'dart:developer' as developer;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,11 +18,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HTTPClient _client = HTTPClient();
-  late DateTime date = DateTime.now();
+  final Geolocalization _geolocalization = Geolocalization();
+  final DateTime date = DateTime.now();
   late String dayText;
   late int dateDay;
   late String dateMonth;
-  Position? _position;
   String? lat;
   String? lon;
 
@@ -37,44 +36,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void getPosition() async {
-    Position tempPosition = await _getCurrentPossition();
-    setState(() {
-      _position = tempPosition;
-      lat = _position?.latitude.toString();
-      lon = _position?.longitude.toString();
-      developer.log(_position.toString());
+    _geolocalization.getCurrentPossition().then((value) {
+      setState(() {
+        lat = "${value.latitude}";
+        lon = "${value.longitude}";
+      });
     });
-  }
-
-  Future<Position> _getCurrentPossition() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      const AlertDialog(
-        title: Text("GPS is disabled"),
-      );
-    }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        const AlertDialog(
-          title: Text("Location permissions are denied"),
-        );
-        return Future.error("Location permissions are denied");
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      const AlertDialog(
-        title: Text(
-            "Location permissions are pernamently denide, operation failed"),
-      );
-      return Future.error(
-          "Location permissions are pernamently denide, operation failed");
-    }
-
-    return await Geolocator.getCurrentPosition();
   }
 
   @override
@@ -96,11 +63,10 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             FutureBuilder(
-                future: _client.getCurrentWeather("52.19", "21.17"),
+                future: _client.getCurrentWeather(lat ?? "1", lon ?? "1"),
                 builder: ((context, snapshot) {
                   if (snapshot.hasData) {
                     WeatherInfo? weatherInfo = snapshot.data;
-
                     return Column(
                       children: [
                         const SizedBox(
@@ -116,22 +82,17 @@ class _HomePageState extends State<HomePage> {
                             Column(children: [
                               Row(
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 17,
                                     height: 15,
                                     child: IconButton(
                                       padding: EdgeInsets.zero,
-                                      icon: const Icon(
+                                      icon: Icon(
                                         Icons.location_on,
                                         color: Color(0xFF6764E7),
                                         size: 17,
                                       ),
-                                      onPressed: () {
-                                        _getCurrentPossition().then((value) {
-                                          lat = "${value.latitude}";
-                                          lon = "${value.longitude}";
-                                        });
-                                      },
+                                      onPressed: null,
                                     ),
                                   ),
                                   Text(
@@ -186,13 +147,13 @@ class _HomePageState extends State<HomePage> {
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  const SizedBox(
+                                  SizedBox(
                                     width: 80,
                                     height: 80,
-                                    child: Placeholder(),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
+                                    child: Image.network(
+                                      "http://openweathermap.org/img/wn/${weatherInfo?.weather?[0]?.icon}@2x.png",
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
                                   Text(
                                     "${weatherInfo?.weather?[0]?.description}",
@@ -201,6 +162,9 @@ class _HomePageState extends State<HomePage> {
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                     ),
+                                  ),
+                                  const SizedBox(
+                                    height: 2,
                                   ),
                                   Text(
                                     "$dayText, $dateDay $dateMonth",
@@ -247,6 +211,8 @@ class _HomePageState extends State<HomePage> {
                           clouds: weatherInfo?.clouds?.cloudsAll,
                           humidity: weatherInfo?.main?.humidity,
                           visibility: weatherInfo?.visibility,
+                          sunrise: weatherInfo?.sys?.sunrise,
+                          sunset: weatherInfo?.sys?.sunset,
                         ),
                         Container(
                           margin: const EdgeInsets.symmetric(
