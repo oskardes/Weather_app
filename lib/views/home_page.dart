@@ -1,4 +1,3 @@
-import 'package:weather_app/logic/geolocatization.dart';
 import 'package:weather_app/logic/http_Client.dart';
 import 'package:weather_app/models/weather_Info.dart';
 import 'package:weather_app/widgets/card_with_gradient.dart';
@@ -10,7 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String lon;
+  final String lat;
+
+  const HomePage({super.key, required this.lon, required this.lat});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -18,13 +20,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HTTPClient _client = HTTPClient();
-  final Geolocalization _geolocalization = Geolocalization();
   final DateTime date = DateTime.now();
   late String dayText;
   late int dateDay;
   late String dateMonth;
-  String? lat;
-  String? lon;
 
   @override
   void initState() {
@@ -32,16 +31,6 @@ class _HomePageState extends State<HomePage> {
     dayText = DateFormat('EEEE').format(date);
     dateDay = date.day;
     dateMonth = DateFormat('MMMM').format(date);
-    getPosition();
-  }
-
-  void getPosition() async {
-    _geolocalization.getCurrentPossition().then((value) {
-      setState(() {
-        lat = "${value.latitude}";
-        lon = "${value.longitude}";
-      });
-    });
   }
 
   @override
@@ -63,7 +52,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             FutureBuilder(
-                future: _client.getCurrentWeather(lat ?? "1", lon ?? "1"),
+                future: _client.getCurrentWeather(widget.lat, widget.lon),
                 builder: ((context, snapshot) {
                   if (snapshot.hasData) {
                     WeatherInfo? weatherInfo = snapshot.data;

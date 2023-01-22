@@ -6,7 +6,11 @@ import 'package:intl/intl.dart';
 import 'package:weather_app/logic/forecast_tile_provider.dart';
 
 class Maps extends StatefulWidget {
-  const Maps({Key? key}) : super(key: key);
+  final double lat;
+  final double lon;
+
+  const Maps({Key? key, required this.lat, required this.lon})
+      : super(key: key);
 
   @override
   State<Maps> createState() => MapsState();
@@ -14,11 +18,8 @@ class Maps extends StatefulWidget {
 
 class MapsState extends State<Maps> {
   GoogleMapController? _controller;
-
-  static const CameraPosition _initialPosition = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 4,
-  );
+  late double _lon;
+  late double _lat;
 
   Set<TileOverlay> _tileOverlays = {};
   final List<String> listOfTypeMap = <String>[
@@ -31,10 +32,23 @@ class MapsState extends State<Maps> {
     "Pressure",
     "Cloudiness"
   ];
+
   String typeOfMap = "PR0";
   String nameOfMap = "Temperature";
   late String dropDownValue = listOfTypeMap.first;
   DateTime _dateFromForecast = DateTime.now();
+  CameraPosition? _initialPosition;
+
+  @override
+  void initState() {
+    _lon = widget.lon;
+    _lat = widget.lat;
+    super.initState();
+    _initialPosition = CameraPosition(
+      target: LatLng(_lat, _lon),
+      zoom: 6,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +60,7 @@ class MapsState extends State<Maps> {
               Factory<PanGestureRecognizer>(() => PanGestureRecognizer()),
             },
             mapType: MapType.normal,
-            initialCameraPosition: _initialPosition,
+            initialCameraPosition: _initialPosition!,
             onMapCreated: (GoogleMapController controller) {
               _controller = controller;
               _initTiles(_dateFromForecast, typeOfMap);

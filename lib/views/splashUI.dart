@@ -5,8 +5,12 @@ class Splash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator.adaptive(),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset("lib/images/weather.png"),
+        const Text("PM Weather"),
+      ],
     );
   }
 }
