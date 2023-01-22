@@ -67,21 +67,29 @@ class MapsState extends State<Maps> {
             },
             tileOverlays: _tileOverlays,
           ),
-          DropdownButton(
-            value: dropDownValue,
-            items: listOfTypeMap.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (String? value) {
-              setState(() {
-                dropDownValue = value!;
-                typeOfMap = checkTypeOfMap(value);
-                _initTiles(_dateFromForecast, typeOfMap);
-              });
-            },
+          Positioned(
+            top: 30,
+            right: 10,
+            child: DropdownButton(
+              value: dropDownValue,
+              items:
+                  listOfTypeMap.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (String? value) {
+                setState(() {
+                  dropDownValue = value!;
+                  typeOfMap = checkTypeOfMap(value);
+                  _tileOverlays.clear();
+                  _actualizationTypeOfMap(typeOfMap);
+                });
+              },
+              alignment: Alignment.centerRight,
+              dropdownColor: Colors.amber[50],
+            ),
           ),
           Positioned(
             bottom: 30,
@@ -150,17 +158,18 @@ class MapsState extends State<Maps> {
     );
   }
 
-  _initTiles(DateTime date, typeOfMap) async {
+  _initTiles(DateTime date, String typeOfMap) async {
     setState(() {
+      _tileOverlays.clear();
       final String overlayID = date.millisecondsSinceEpoch.toString();
       final TileOverlay tileOverlay = TileOverlay(
-          tileOverlayId: TileOverlayId(overlayID),
-          tileProvider: ForecastTileProvider(
-            mapType: typeOfMap,
-            opacity: 0.5,
-            date: date,
-          ));
-
+        tileOverlayId: TileOverlayId(overlayID),
+        tileProvider: ForecastTileProvider(
+          mapType: typeOfMap,
+          opacity: 0.7,
+          date: date,
+        ),
+      );
       _tileOverlays = {tileOverlay};
     });
   }
@@ -173,22 +182,32 @@ class MapsState extends State<Maps> {
   }
 
   String checkTypeOfMap(String? valueFromDropDownList) {
-    if (valueFromDropDownList == "Temperature") {
-      return "TA2";
-    } else if (valueFromDropDownList == "Rain") {
-      return "PAR0";
-    } else if (valueFromDropDownList == "Snow") {
-      return "PAS0";
-    } else if (valueFromDropDownList == "Depth of snow") {
-      return "SD0";
-    } else if (valueFromDropDownList == "Wind") {
-      return "WS10";
-    } else if (valueFromDropDownList == "Humidity") {
-      return "HRD0";
-    } else if (valueFromDropDownList == "Pressure") {
-      return "APM";
-    } else {
-      return "CL";
+    switch (valueFromDropDownList) {
+      case "Temperature":
+        return "TA2";
+      case "Rain":
+        return "PAR0";
+      case "Snow":
+        return "PAS0";
+      case "Depth of snow":
+        return "SD0";
+      case "Wind":
+        return "WS10";
+      case "Humidity":
+        return "HRD0";
+      case "Pressure":
+        return "APM0";
+      case "Cloudiness":
+        return "CL";
+      default:
+        return "TA2";
     }
+  }
+
+  void _actualizationTypeOfMap(String typeOfMap) {
+    setState(() {
+      _tileOverlays.clear;
+      _initTiles(_dateFromForecast, typeOfMap);
+    });
   }
 }
