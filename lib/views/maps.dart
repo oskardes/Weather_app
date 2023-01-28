@@ -1,71 +1,89 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:intl/intl.dart';
-import 'package:weather_app/logic/forecast_tile_provider.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:weather_app/widgets/scale_bars/scale_bar_clouds.dart';
+import 'package:weather_app/widgets/scale_bars/scale_bar_humidity.dart';
+import 'package:weather_app/widgets/scale_bars/scale_bar_precipitation.dart';
+import 'package:weather_app/widgets/scale_bars/scale_bar_pressure.dart';
+import 'package:weather_app/widgets/scale_bars/scale_bar_temp.dart';
+import 'package:weather_app/widgets/scale_bars/scale_bar_wind.dart';
+import 'package:weather_app/widgets/white_button.dart';
 
 class Maps extends StatefulWidget {
-  final double lat;
-  final double lon;
+  final String lat;
+  final String lon;
 
-  const Maps({Key? key, required this.lat, required this.lon})
-      : super(key: key);
+  const Maps({super.key, required this.lat, required this.lon});
 
   @override
-  State<Maps> createState() => MapsState();
+  State<Maps> createState() => _MapsState();
 }
 
-class MapsState extends State<Maps> {
-  GoogleMapController? _controller;
-  late double _lon;
-  late double _lat;
-
-  Set<TileOverlay> _tileOverlays = {};
+class _MapsState extends State<Maps> {
   final List<String> listOfTypeMap = <String>[
     "Temperature",
-    "Rain",
-    "Snow",
-    "Depth of snow",
+    "Precipitation",
     "Wind",
     "Humidity",
     "Pressure",
     "Cloudiness"
   ];
 
-  String typeOfMap = "PR0";
-  String nameOfMap = "Temperature";
   late String dropDownValue = listOfTypeMap.first;
-  DateTime _dateFromForecast = DateTime.now();
-  CameraPosition? _initialPosition;
-
-  @override
-  void initState() {
-    _lon = widget.lon;
-    _lat = widget.lat;
-    super.initState();
-    _initialPosition = CameraPosition(
-      target: LatLng(_lat, _lon),
-      zoom: 6,
-    );
-  }
+  String typeOfMap = "TA2";
+  DateTime dateFromForecast = DateTime.now();
+  String opacity = "0.8";
+  Widget curretScaleBar = const ScaleBarTemp();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          GoogleMap(
-            gestureRecognizers: {
-              Factory<PanGestureRecognizer>(() => PanGestureRecognizer()),
-            },
-            mapType: MapType.normal,
-            initialCameraPosition: _initialPosition!,
-            onMapCreated: (GoogleMapController controller) {
-              _controller = controller;
-              _initTiles(_dateFromForecast, typeOfMap);
-            },
-            tileOverlays: _tileOverlays,
+          FlutterMap(
+            options: MapOptions(
+              center: LatLng(
+                double.parse(widget.lat),
+                double.parse(widget.lon),
+              ),
+              keepAlive: false,
+              zoom: 7,
+              maxZoom: 13,
+            ),
+            // TileLayer(
+            //   urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+            //   userAgentPackageName: 'com.oskardes.weatherApp',
+            // ),
+            children: [
+              TileLayer(
+                urlTemplate:
+                    "https://api.mapbox.com/styles/v1/oskardes/cldf15ih7009x01oergvp3gg1/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoib3NrYXJkZXMiLCJhIjoiY2xkZjEyMDNiMGZqdTNwcGlyZ3Q2eTcxMCJ9.XLYa3nxHUctCHolj0sVgDw",
+                additionalOptions: const {
+                  "access_token":
+                      "pk.eyJ1Ijoib3NrYXJkZXMiLCJhIjoiY2xkZjEyMDNiMGZqdTNwcGlyZ3Q2eTcxMCJ9.XLYa3nxHUctCHolj0sVgDw"
+                },
+                userAgentPackageName: 'com.oskardes.weatherApp',
+              ),
+              TileLayer(
+                urlTemplate:
+                    "http://maps.openweathermap.org/maps/2.0/weather/$typeOfMap/{z}/{x}/{y}?date=${dateFromForecast.millisecondsSinceEpoch ~/ 1000}&appid=f33c6d263c1af0b1db4d50d873b51e36&opacity=$opacity",
+                userAgentPackageName: 'com.oskardes.weatherApp',
+                opacity: 0.6,
+              ),
+            ],
+          ),
+          Positioned(
+            top: 20,
+            left: 20,
+            child: WhiteButton(
+              color: Colors.black,
+              fun: () {
+                Navigator.pop(context);
+              },
+              icon: Icons.home,
+              radius: 15,
+            ),
           ),
           Positioned(
             top: 30,
@@ -83,12 +101,11 @@ class MapsState extends State<Maps> {
                 setState(() {
                   dropDownValue = value!;
                   typeOfMap = checkTypeOfMap(value);
-                  _tileOverlays.clear();
-                  _actualizationTypeOfMap(typeOfMap);
+                  opacity = checkOpacityOfMap(value);
+                  curretScaleBar = checkScaleBar(value);
                 });
               },
               alignment: Alignment.centerRight,
-              dropdownColor: Colors.amber[50],
             ),
           ),
           Positioned(
@@ -105,11 +122,10 @@ class MapsState extends State<Maps> {
                         backgroundColor: Colors.white,
                         shape: const CircleBorder(),
                       ),
-                      onPressed: _controller == null
-                          ? null
-                          : () {
-                              _actualizationDate(const Duration(hours: -3));
-                            },
+                      onPressed: (() => setState(() {
+                            dateFromForecast =
+                                dateFromForecast.add(const Duration(hours: -3));
+                          })),
                       child: const Icon(
                         Icons.arrow_back_ios_new_rounded,
                         color: Colors.black,
@@ -124,7 +140,7 @@ class MapsState extends State<Maps> {
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Text(
-                            'Forecast Date:\n ${DateFormat('yyyy-MM-dd HH:mm').format(_dateFromForecast.toLocal())}',
+                            'Forecast Date:\n ${DateFormat('yyyy-MM-dd HH:mm').format(dateFromForecast.toLocal())}',
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -138,11 +154,10 @@ class MapsState extends State<Maps> {
                         backgroundColor: Colors.white,
                         shape: const CircleBorder(),
                       ),
-                      onPressed: _controller == null
-                          ? null
-                          : () {
-                              _actualizationDate(const Duration(hours: 3));
-                            },
+                      onPressed: (() => setState(() {
+                            dateFromForecast =
+                                dateFromForecast.add(const Duration(hours: 3));
+                          })),
                       child: const Icon(
                         Icons.arrow_forward_ios,
                         color: Colors.black,
@@ -153,50 +168,36 @@ class MapsState extends State<Maps> {
               ),
             ),
           ),
+          Positioned(
+            bottom: 5,
+            left: 45,
+            child: Card(
+              elevation: 4,
+              color: Colors.white,
+              child: Row(
+                children: [
+                  curretScaleBar,
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
-  }
-
-  _initTiles(DateTime date, String typeOfMap) async {
-    setState(() {
-      _tileOverlays.clear();
-      final String overlayID = date.millisecondsSinceEpoch.toString();
-      final TileOverlay tileOverlay = TileOverlay(
-        tileOverlayId: TileOverlayId(overlayID),
-        tileProvider: ForecastTileProvider(
-          mapType: typeOfMap,
-          opacity: 0.7,
-          date: date,
-        ),
-      );
-      _tileOverlays = {tileOverlay};
-    });
-  }
-
-  void _actualizationDate(Duration duration) {
-    setState(() {
-      _dateFromForecast = _dateFromForecast.add(duration);
-      _initTiles(_dateFromForecast, typeOfMap);
-    });
   }
 
   String checkTypeOfMap(String? valueFromDropDownList) {
     switch (valueFromDropDownList) {
       case "Temperature":
         return "TA2";
-      case "Rain":
-        return "PAR0";
-      case "Snow":
-        return "PAS0";
-      case "Depth of snow":
-        return "SD0";
+      case "Precipitation":
+        return "PR0";
       case "Wind":
         return "WS10";
       case "Humidity":
         return "HRD0";
       case "Pressure":
-        return "APM0";
+        return "APM";
       case "Cloudiness":
         return "CL";
       default:
@@ -204,10 +205,41 @@ class MapsState extends State<Maps> {
     }
   }
 
-  void _actualizationTypeOfMap(String typeOfMap) {
-    setState(() {
-      _tileOverlays.clear;
-      _initTiles(_dateFromForecast, typeOfMap);
-    });
+  String checkOpacityOfMap(String? valueFromDropDownList) {
+    switch (valueFromDropDownList) {
+      case "Temperature":
+        return "0.7";
+      case "Precipitation":
+        return "1";
+      case "Wind":
+        return "1";
+      case "Humidity":
+        return "1";
+      case "Pressure":
+        return "0.4";
+      case "Cloudiness":
+        return "1";
+      default:
+        return "0.8";
+    }
+  }
+
+  Widget checkScaleBar(String? valueFromDropDownList) {
+    switch (valueFromDropDownList) {
+      case "Temperature":
+        return const ScaleBarTemp();
+      case "Precipitation":
+        return const ScaleBarPrecipitation();
+      case "Wind":
+        return const ScaleBarWind();
+      case "Humidity":
+        return const ScaleBarHumidity();
+      case "Pressure":
+        return const ScaleBarPressure();
+      case "Cloudiness":
+        return const ScaleBarClouds();
+      default:
+        return const ScaleBarTemp();
+    }
   }
 }

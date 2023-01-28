@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/widgets/white_button.dart';
 
 class Prediction extends StatelessWidget {
   const Prediction({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        alignment: Alignment.center,
-        color: Colors.green,
-        child: const Text(
-          'Page 2',
-          style: TextStyle(fontSize: 50, color: Colors.white),
-        ));
+    return Scaffold(
+      body: Center(
+        child: WhiteButton(
+          color: Colors.black,
+          fun: () {
+            Navigator.pop(context);
+          },
+          icon: Icons.home,
+          radius: 15,
+        ),
+      ),
+    );
   }
 }

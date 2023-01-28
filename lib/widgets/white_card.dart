@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/logic/http_client.dart';
+import 'package:weather_app/models/air_polution.dart';
 import 'package:weather_app/widgets/white_button.dart';
 
 import 'package:intl/intl.dart';
 
 class WhiteCard extends StatelessWidget {
+  final HTTPClient _client = HTTPClient();
   final int? pressure;
   final int? clouds;
   final double? windSpeed;
@@ -11,13 +14,15 @@ class WhiteCard extends StatelessWidget {
   final int? humidity;
   final int? sunrise;
   final int? sunset;
+  final String lat;
+  final String lon;
 
   String convertDateTime(int utcTimestamp) {
     var tempTime = DateTime.fromMillisecondsSinceEpoch(utcTimestamp * 1000);
     return DateFormat.Hm().format(tempTime);
   }
 
-  const WhiteCard({
+  WhiteCard({
     Key? key,
     required this.pressure,
     required this.clouds,
@@ -26,6 +31,8 @@ class WhiteCard extends StatelessWidget {
     required this.visibility,
     required this.sunrise,
     required this.sunset,
+    required this.lat,
+    required this.lon,
   }) : super(key: key);
 
   @override
@@ -58,6 +65,8 @@ class WhiteCard extends StatelessWidget {
                       WhiteButton(
                         icon: Icons.refresh,
                         color: Colors.black,
+                        fun: null,
+                        radius: 15,
                       ),
                     ],
                   ),
@@ -170,7 +179,7 @@ class WhiteCard extends StatelessWidget {
                           Text(
                             '${convertDateTime(sunrise ?? 0)}',
                             style: const TextStyle(
-                                color: Colors.grey,
+                                color: Colors.black,
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600),
                           ),
@@ -184,14 +193,86 @@ class WhiteCard extends StatelessWidget {
                         Text(
                           '${convertDateTime(sunset ?? 0)}',
                           style: const TextStyle(
-                              color: Colors.grey,
+                              color: Colors.black,
                               fontSize: 11,
                               fontWeight: FontWeight.w600),
                         ),
                       ]),
                     ],
-                  )
+                  ),
                 ],
+              ),
+              FutureBuilder(
+                future: _client.getAirCondition(lat, lon),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    AirPolution? airPolution = snapshot.data;
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            const Icon(Icons.speed),
+                            const Text(
+                              'Aqi index ',
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            Text(
+                              '${airPolution?.list?[0]?.main?.aqi}',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            const Icon(Icons.apps),
+                            const Text(
+                              'PM2.5 [μg/m3]',
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            Text(
+                              '${airPolution?.list?[0]?.components?.pm2_5} }',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            const Icon(Icons.drag_indicator),
+                            const Text(
+                              'CO [μg/m3]',
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            Text(
+                              "${airPolution?.list?[0]?.components?.co} ",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  } else if (snapshot.hasError) {
+                    const AlertDialog(
+                      title: Text("Error"),
+                    );
+                  }
+                  return const Center(
+                    child: SizedBox(
+                        height: 40, child: Center(child: Text("Updating*"))),
+                  );
+                },
               ),
             ]),
           ),

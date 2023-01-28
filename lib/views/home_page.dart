@@ -1,8 +1,9 @@
-import 'package:weather_app/logic/http_Client.dart';
-import 'package:weather_app/models/weather_Info.dart';
+import 'package:weather_app/logic/http_client.dart';
+import 'package:weather_app/models/weather_info.dart';
+import 'package:weather_app/views/maps.dart';
+import 'package:weather_app/views/prediction.dart';
 import 'package:weather_app/widgets/card_with_gradient.dart';
 import 'package:weather_app/widgets/weekly_listview.dart';
-import 'package:weather_app/widgets/white_button.dart';
 import 'package:weather_app/widgets/white_card.dart';
 
 import 'package:flutter/material.dart';
@@ -64,9 +65,30 @@ class _HomePageState extends State<HomePage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            const WhiteButton(
-                              icon: Icons.tune,
-                              color: Colors.black,
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => Maps(
+                                      lat: widget.lat,
+                                      lon: widget.lon,
+                                    ),
+                                  ),
+                                );
+                              },
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    const Color(0xFF6264EF)),
+                                foregroundColor:
+                                    MaterialStateProperty.all(Colors.white),
+                              ),
+                              child: const Text(
+                                "Go to maps",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                             Column(children: [
                               Row(
@@ -88,45 +110,36 @@ class _HomePageState extends State<HomePage> {
                                     "${weatherInfo?.name}",
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
+                                      fontSize: 15,
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
-                              Container(
-                                padding: const EdgeInsets.only(left: 12),
-                                child: Row(
-                                  children: const [
-                                    CardWithGradient(
-                                      // padding: EdgeInsets.only(left: 7),
-                                      padding: EdgeInsets.zero,
-                                      margin: EdgeInsets.symmetric(vertical: 5),
-                                      width: 52,
-                                      beginAlignment: Alignment.topLeft,
-                                      endAlignment: Alignment.topLeft,
-                                      child: Text(
-                                        "Updating *",
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
                             ]),
-                            const CircleAvatar(
-                              radius: 15,
-                              backgroundColor: Colors.white,
-                              backgroundImage:
-                                  AssetImage('lib/images/avatar.png'),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const Prediction()));
+                              },
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    const Color(0xFF6264EF)),
+                                foregroundColor:
+                                    MaterialStateProperty.all(Colors.white),
+                              ),
+                              child: const Text(
+                                "Prediction",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ],
                         ),
                         CardWithGradient(
                           margin: const EdgeInsets.all(18),
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(18),
                           width: double.infinity,
                           beginAlignment: Alignment.topLeft,
                           endAlignment: Alignment.bottomRight,
@@ -137,8 +150,8 @@ class _HomePageState extends State<HomePage> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   SizedBox(
-                                    width: 80,
-                                    height: 80,
+                                    width: 100,
+                                    height: 95,
                                     child: Image.network(
                                       "http://openweathermap.org/img/wn/${weatherInfo?.weather?[0]?.icon}@2x.png",
                                       fit: BoxFit.fill,
@@ -148,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                                     "${weatherInfo?.weather?[0]?.description}",
                                     style: const TextStyle(
                                       color: Colors.white,
-                                      fontSize: 15,
+                                      fontSize: 17,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -159,7 +172,7 @@ class _HomePageState extends State<HomePage> {
                                     "$dayText, $dateDay $dateMonth",
                                     style: const TextStyle(
                                       color: Colors.white,
-                                      fontSize: 10,
+                                      fontSize: 12,
                                     ),
                                   ),
                                 ],
@@ -170,14 +183,14 @@ class _HomePageState extends State<HomePage> {
                                   Text(
                                     "${weatherInfo?.main?.temp?.floor()}°",
                                     style: const TextStyle(
-                                        fontSize: 45,
+                                        fontSize: 50,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white),
                                   ),
                                   Text(
                                     'Fells like ${weatherInfo?.main?.feelsLike?.floor()}°',
                                     style: const TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 14,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -202,6 +215,8 @@ class _HomePageState extends State<HomePage> {
                           visibility: weatherInfo?.visibility,
                           sunrise: weatherInfo?.sys?.sunrise,
                           sunset: weatherInfo?.sys?.sunset,
+                          lat: widget.lat,
+                          lon: widget.lon,
                         ),
                         Container(
                           margin: const EdgeInsets.symmetric(

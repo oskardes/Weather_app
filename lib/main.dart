@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather_app/views/home_page.dart';
-import 'package:weather_app/views/maps.dart';
-import 'package:weather_app/views/prediction.dart';
-import 'package:weather_app/views/splashUI.dart';
+import 'package:weather_app/views/splash_ui.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,9 +18,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final PageController _pageController =
-      PageController(initialPage: 1, viewportFraction: 1);
-
   Future<Position>? getLoc;
 
   @override
@@ -45,17 +40,10 @@ class _MyAppState extends State<MyApp> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               Position currentPosition = snapshot.data!;
-              return PageView(controller: _pageController, children: [
-                Maps(
-                  lat: currentPosition.latitude,
-                  lon: currentPosition.longitude,
-                ),
-                HomePage(
-                  lat: currentPosition.latitude.toString(),
-                  lon: currentPosition.longitude.toString(),
-                ),
-                const Prediction(),
-              ]);
+              return HomePage(
+                lat: currentPosition.latitude.toString(),
+                lon: currentPosition.longitude.toString(),
+              );
             } else {
               return const Center(
                 child: Splash(),

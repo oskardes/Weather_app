@@ -1,6 +1,6 @@
 import 'package:weather_app/models/clouds.dart';
 import 'package:weather_app/models/coord.dart';
-import 'package:weather_app/models/main_Info.dart';
+import 'package:weather_app/models/main_info.dart';
 import 'package:weather_app/models/rain.dart';
 import 'package:weather_app/models/snow.dart';
 import 'package:weather_app/models/sys.dart';
