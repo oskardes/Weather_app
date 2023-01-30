@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/logic/http_client.dart';
-import 'package:weather_app/models/air_polution.dart';
 import 'package:weather_app/widgets/white_button.dart';
 
 import 'package:intl/intl.dart';
 
 class WhiteCard extends StatelessWidget {
-  final HTTPClient _client = HTTPClient();
   final int? pressure;
   final int? clouds;
   final double? windSpeed;
@@ -22,7 +20,7 @@ class WhiteCard extends StatelessWidget {
     return DateFormat.Hm().format(tempTime);
   }
 
-  WhiteCard({
+  const WhiteCard({
     Key? key,
     required this.pressure,
     required this.clouds,
@@ -201,78 +199,6 @@ class WhiteCard extends StatelessWidget {
                     ],
                   ),
                 ],
-              ),
-              FutureBuilder(
-                future: _client.getAirCondition(lat, lon),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    AirPolution? airPolution = snapshot.data;
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          children: [
-                            const Icon(Icons.speed),
-                            const Text(
-                              'Aqi index ',
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            Text(
-                              '${airPolution?.list?[0]?.main?.aqi}',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 12),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            const Icon(Icons.apps),
-                            const Text(
-                              'PM2.5 [μg/m3]',
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            Text(
-                              '${airPolution?.list?[0]?.components?.pm2_5} }',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 12),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            const Icon(Icons.drag_indicator),
-                            const Text(
-                              'CO [μg/m3]',
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            Text(
-                              "${airPolution?.list?[0]?.components?.co} ",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 12),
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  } else if (snapshot.hasError) {
-                    const AlertDialog(
-                      title: Text("Error"),
-                    );
-                  }
-                  return const Center(
-                    child: SizedBox(
-                        height: 40, child: Center(child: Text("Updating*"))),
-                  );
-                },
               ),
             ]),
           ),

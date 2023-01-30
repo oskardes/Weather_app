@@ -1,8 +1,6 @@
-import 'package:weather_app/models/air_polution.dart';
+import 'package:weather_app/models/predict.dart';
 import 'package:weather_app/models/weather_info.dart';
-
 import 'package:http/http.dart' as http;
-import 'dart:developer' as developer;
 import 'dart:convert';
 
 class HTTPClient {
@@ -22,24 +20,24 @@ class HTTPClient {
 
     final response = await http.get(url);
 
-    developer.log(response.body);
     final json = jsonDecode(response.body);
     return WeatherInfo.fromJson(json);
   }
 
-  Future<AirPolution> getAirCondition(String lat, String lon) async {
+  Future<Predict> getPredictWeather(String lat, String lon) async {
     final queryParameters = {
       'lat': lat,
       'lon': lon,
       'appid': _appid,
+      'units': units,
+      'cnt': "7"
     };
 
-    final url = Uri.https(baseURL, '/data/2.5/air_pollution', queryParameters);
+    final url = Uri.https(baseURL, 'data/2.5/forecast/daily', queryParameters);
 
     final response = await http.get(url);
 
-    developer.log(response.body);
     final json = jsonDecode(response.body);
-    return AirPolution.fromJson(json);
+    return Predict.fromJson(json);
   }
 }

@@ -12,8 +12,9 @@ import 'package:intl/intl.dart';
 class HomePage extends StatefulWidget {
   final String lon;
   final String lat;
+  bool loading = true;
 
-  const HomePage({super.key, required this.lon, required this.lat});
+  HomePage({super.key, required this.lon, required this.lat});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -56,6 +57,7 @@ class _HomePageState extends State<HomePage> {
                 future: _client.getCurrentWeather(widget.lat, widget.lon),
                 builder: ((context, snapshot) {
                   if (snapshot.hasData) {
+                    widget.loading = false;
                     WeatherInfo? weatherInfo = snapshot.data;
                     return Column(
                       children: [
@@ -65,37 +67,12 @@ class _HomePageState extends State<HomePage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => Maps(
-                                      lat: widget.lat,
-                                      lon: widget.lon,
-                                    ),
-                                  ),
-                                );
-                              },
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    const Color(0xFF6264EF)),
-                                foregroundColor:
-                                    MaterialStateProperty.all(Colors.white),
-                              ),
-                              child: const Text(
-                                "Go to maps",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
                             Column(children: [
                               Row(
                                 children: [
                                   const SizedBox(
-                                    width: 17,
-                                    height: 15,
+                                    width: 20,
+                                    height: 20,
                                     child: IconButton(
                                       padding: EdgeInsets.zero,
                                       icon: Icon(
@@ -110,31 +87,12 @@ class _HomePageState extends State<HomePage> {
                                     "${weatherInfo?.name}",
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15,
+                                      fontSize: 20,
                                     ),
                                   ),
                                 ],
                               ),
                             ]),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const Prediction()));
-                              },
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    const Color(0xFF6264EF)),
-                                foregroundColor:
-                                    MaterialStateProperty.all(Colors.white),
-                              ),
-                              child: const Text(
-                                "Prediction",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                         CardWithGradient(
@@ -241,9 +199,13 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        const SizedBox(
+                        SizedBox(
                           height: 140,
-                          child: WeeklyListView(realDay: 0),
+                          child: WeeklyListView(
+                            realDay: 0,
+                            lat: widget.lat,
+                            lon: widget.lon,
+                          ),
                         ),
                       ],
                     );
@@ -255,7 +217,57 @@ class _HomePageState extends State<HomePage> {
                   return const Center(
                     child: CircularProgressIndicator.adaptive(),
                   );
-                }))
+                })),
+            const SizedBox(
+              height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => Maps(
+                          lat: widget.lat,
+                          lon: widget.lon,
+                        ),
+                      ),
+                    );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(const Color(0xFF6264EF)),
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                  ),
+                  child: const Text(
+                    "Go to maps",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const Prediction()));
+                  },
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(const Color(0xFF6264EF)),
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                  ),
+                  child: const Text(
+                    "Prediction",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
