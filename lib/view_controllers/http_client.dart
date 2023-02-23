@@ -19,7 +19,6 @@ class HTTPClient {
     final url = Uri.https(baseURL, '/data/2.5/weather', queryParameters);
 
     final response = await http.get(url);
-
     final json = jsonDecode(response.body);
     return WeatherInfo.fromJson(json);
   }
@@ -36,7 +35,6 @@ class HTTPClient {
     final url = Uri.https(baseURL, 'data/2.5/forecast/daily', queryParameters);
 
     final response = await http.get(url);
-
     final json = jsonDecode(response.body);
     return Predict.fromJson(json);
   }

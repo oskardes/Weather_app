@@ -32,4 +32,9 @@ class Geolocalization {
 
     return await Geolocator.getCurrentPosition();
   }
+
+  Future<Position> setCurretnLocation() async {
+    Position location = await Geolocator.getCurrentPosition();
+    return location;
+  }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/logic/http_client.dart';
+import 'package:weather_app/view_controllers/http_client.dart';
 import 'package:weather_app/widgets/white_button.dart';
 
 import 'package:intl/intl.dart';

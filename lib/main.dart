@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:weather_app/view_controllers/geolocatization.dart';
 import 'package:weather_app/views/home_page.dart';
 import 'package:weather_app/views/splash_ui.dart';
 
@@ -19,10 +20,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Future<Position>? getLoc;
+  final Geolocalization _geolocalization = Geolocalization();
 
   @override
   void initState() {
-    getLoc = _setCurretnLocation();
+    getLoc = _geolocalization.setCurretnLocation();
     super.initState();
   }
 
@@ -52,9 +54,4 @@ class _MyAppState extends State<MyApp> {
           },
         )));
   }
-}
-
-Future<Position> _setCurretnLocation() async {
-  Position location = await Geolocator.getCurrentPosition();
-  return location;
 }

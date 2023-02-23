@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:weather_app/logic/http_client.dart';
+import 'package:weather_app/view_controllers/day_name.dart';
+import 'package:weather_app/view_controllers/http_client.dart';
 import 'package:weather_app/models/predict.dart';
 
 class WeeklyListView extends StatelessWidget {
   final int realDay;
   final DateTime currentDate = DateTime.now();
   final HTTPClient _httpClient = HTTPClient();
+  final DayName _dayName = DayName();
   final String lat;
   final String lon;
 
@@ -16,27 +18,6 @@ class WeeklyListView extends StatelessWidget {
     required this.lat,
     required this.lon,
   }) : super(key: key);
-
-  String parseDateofWeekToShort(String dayOfWeek) {
-    switch (dayOfWeek) {
-      case "Monday":
-        return "MON";
-      case "Tuesday":
-        return "TUE";
-      case "Wednesday":
-        return "WED";
-      case "Thursday":
-        return "THU";
-      case "Friday":
-        return "FRI";
-      case "Sunday":
-        return "SUN";
-      case "Saturday":
-        return "SAT";
-      default:
-        return "MON";
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +49,7 @@ class WeeklyListView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      parseDateofWeekToShort(DateFormat('EEEE')
+                      _dayName.parseDateofWeekToShort(DateFormat('EEEE')
                           .format(currentDate.add(const Duration(days: 1)))),
                       style: const TextStyle(
                         fontSize: 12,
@@ -140,7 +121,7 @@ class WeeklyListView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      parseDateofWeekToShort(DateFormat('EEEE')
+                      _dayName.parseDateofWeekToShort(DateFormat('EEEE')
                           .format(currentDate.add(const Duration(days: 2)))),
                       style: const TextStyle(
                           fontSize: 12, fontWeight: FontWeight.bold),
@@ -210,7 +191,7 @@ class WeeklyListView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      parseDateofWeekToShort(DateFormat('EEEE')
+                      _dayName.parseDateofWeekToShort(DateFormat('EEEE')
                           .format(currentDate.add(const Duration(days: 3)))),
                       style: const TextStyle(
                         fontSize: 12,
@@ -282,7 +263,7 @@ class WeeklyListView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      parseDateofWeekToShort(DateFormat('EEEE')
+                      _dayName.parseDateofWeekToShort(DateFormat('EEEE')
                           .format(currentDate.add(const Duration(days: 4)))),
                       style: const TextStyle(
                         fontSize: 12,
@@ -354,7 +335,7 @@ class WeeklyListView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      parseDateofWeekToShort(DateFormat('EEEE')
+                      _dayName.parseDateofWeekToShort(DateFormat('EEEE')
                           .format(currentDate.add(const Duration(days: 5)))),
                       style: const TextStyle(
                         fontSize: 12,
@@ -426,7 +407,7 @@ class WeeklyListView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      parseDateofWeekToShort(DateFormat('EEEE')
+                      _dayName.parseDateofWeekToShort(DateFormat('EEEE')
                           .format(currentDate.add(const Duration(days: 6)))),
                       style: const TextStyle(
                         fontSize: 12,
@@ -498,7 +479,7 @@ class WeeklyListView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      parseDateofWeekToShort(DateFormat('EEEE')
+                      _dayName.parseDateofWeekToShort(DateFormat('EEEE')
                           .format(currentDate.add(const Duration(days: 7)))),
                       style: const TextStyle(
                         fontSize: 12,
