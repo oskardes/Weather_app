@@ -52,7 +52,7 @@ class ListElemets {
         gust: json["gust"]?.toDouble(),
         clouds: json["clouds"],
         pop: json["pop"]?.toDouble(),
-        rain: json["rain"]?.toDouble(),
+        rain: json["rain"]?.toDouble() ?? 0.0,
         snow: json["snow"]?.toDouble(),
       );
 

@@ -30,7 +30,7 @@ class _PredictionState extends State<Prediction> {
     var output = await Tflite.runModelOnImage(
         path: image.path,
         numResults: 14,
-        threshold: 0.5,
+        threshold: 0.6,
         imageMean: 127.5,
         imageStd: 127.5);
     setState(() {

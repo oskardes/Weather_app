@@ -188,16 +188,11 @@ class _HomePageState extends State<HomePage> {
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 18),
                               ),
-                              TextButton(
-                                onPressed: null,
-                                child: Text(
-                                  'Next Month  >',
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 162, 30, 206)),
-                                ),
-                              ),
                             ],
                           ),
+                        ),
+                        const SizedBox(
+                          height: 20,
                         ),
                         SizedBox(
                           height: 140,
