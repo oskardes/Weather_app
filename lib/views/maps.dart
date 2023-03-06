@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:weather_app/view_controllers/map_change.dart';
+import 'package:weather_app/view_models/map_change.dart';
 import 'package:weather_app/widgets/scale_bars/scale_bar_temp.dart';
 import 'package:weather_app/widgets/white_button.dart';
 

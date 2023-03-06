@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:weather_app/view_controllers/day_name.dart';
-import 'package:weather_app/view_controllers/http_client.dart';
+import 'package:weather_app/view_models/day_name.dart';
+import 'package:weather_app/view_models/http_client.dart';
 import 'package:weather_app/models/predict.dart';
 
 class WeeklyListView extends StatelessWidget {

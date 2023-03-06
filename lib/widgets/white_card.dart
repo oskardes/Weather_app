@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/view_controllers/http_client.dart';
+import 'package:weather_app/view_models/http_client.dart';
 import 'package:weather_app/widgets/white_button.dart';
 
 import 'package:intl/intl.dart';
@@ -175,7 +175,7 @@ class WhiteCard extends StatelessWidget {
                         children: [
                           const Icon(Icons.wb_sunny_outlined),
                           Text(
-                            '${convertDateTime(sunrise ?? 0)}',
+                            convertDateTime(sunrise ?? 0),
                             style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 11,
@@ -189,7 +189,7 @@ class WhiteCard extends StatelessWidget {
                       Row(children: [
                         const Icon(Icons.mode_night_outlined),
                         Text(
-                          '${convertDateTime(sunset ?? 0)}',
+                          convertDateTime(sunset ?? 0),
                           style: const TextStyle(
                               color: Colors.black,
                               fontSize: 11,

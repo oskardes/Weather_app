@@ -1,4 +1,4 @@
-import 'package:weather_app/view_controllers/http_client.dart';
+import 'package:weather_app/view_models/http_client.dart';
 import 'package:weather_app/models/weather_info.dart';
 import 'package:weather_app/views/maps.dart';
 import 'package:weather_app/views/prediction.dart';

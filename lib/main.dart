@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:weather_app/view_controllers/geolocatization.dart';
+import 'package:weather_app/view_models/geolocatization.dart';
 import 'package:weather_app/views/home_page.dart';
 import 'package:weather_app/views/splash_ui.dart';
 
