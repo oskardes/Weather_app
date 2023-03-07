@@ -1,3 +1,4 @@
+import 'package:weather_app/view_models/day_name.dart';
 import 'package:weather_app/view_models/http_client.dart';
 import 'package:weather_app/models/weather_info.dart';
 import 'package:weather_app/views/maps.dart';
@@ -22,7 +23,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HTTPClient _client = HTTPClient();
-  final DateTime date = DateTime.now();
+  final DayName dayname = DayName();
   late String dayText;
   late int dateDay;
   late String dateMonth;
@@ -30,9 +31,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    dayText = DateFormat('EEEE').format(date);
-    dateDay = date.day;
-    dateMonth = DateFormat('MMMM').format(date);
+    dayText = DateFormat('EEEE').format(dayname.getCurrentData());
+    dateDay = dayname.getCurrentData().day;
+    dateMonth = DateFormat('MMMM').format(dayname.getCurrentData());
   }
 
   @override
@@ -220,6 +221,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
+                  key: const Key('goToMaps'),
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -244,6 +246,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 ElevatedButton(
+                  key: const Key('goToPrediction'),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const Prediction()));

@@ -132,6 +132,7 @@ class _PredictionState extends State<Prediction> {
                 ),
                 Column(children: [
                   ElevatedButton(
+                    key: const Key('TakePhoto'),
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(const Color(0xFF8763EC)),
@@ -140,6 +141,7 @@ class _PredictionState extends State<Prediction> {
                     child: const Text("Take a photo"),
                   ),
                   ElevatedButton(
+                    key: const Key('LoadGalery'),
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(const Color(0xFF8763EC)),

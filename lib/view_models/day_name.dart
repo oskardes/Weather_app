@@ -19,4 +19,9 @@ class DayName {
         return "MON";
     }
   }
+
+  DateTime getCurrentData() {
+    final DateTime date = DateTime.now();
+    return date;
+  }
 }
