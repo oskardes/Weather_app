@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class HTTPClient {
-  final _appid = "f33c6d263c1af0b1db4d50d873b51e36";
+  final _appid = "**********************";
   final units = "metric";
   final baseURL = "api.openweathermap.org";
 
