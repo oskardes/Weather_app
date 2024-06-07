@@ -61,7 +61,7 @@ class _MapsState extends State<Maps> {
               ),
               TileLayer(
                 urlTemplate:
-                    "http://maps.openweathermap.org/maps/2.0/weather/$typeOfMap/{z}/{x}/{y}?date=${dateFromForecast.millisecondsSinceEpoch ~/ 1000}&appid=f33c6d263c1af0b1db4d50d873b51e36&opacity=$opacity",
+                    "http://maps.openweathermap.org/maps/2.0/weather/$typeOfMap/{z}/{x}/{y}?date=${dateFromForecast.millisecondsSinceEpoch ~/ 1000}&appid=*********************&opacity=$opacity",
                 userAgentPackageName: 'com.oskardes.weatherApp',
                 opacity: 0.6,
               ),
