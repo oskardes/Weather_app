@@ -52,10 +52,10 @@ class _MapsState extends State<Maps> {
             children: [
               TileLayer(
                 urlTemplate:
-                    "https://api.mapbox.com/styles/v1/oskardes/cldf15ih7009x01oergvp3gg1/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoib3NrYXJkZXMiLCJhIjoiY2xkZjEyMDNiMGZqdTNwcGlyZ3Q2eTcxMCJ9.XLYa3nxHUctCHolj0sVgDw",
+                    "https://api.mapbox.com/styles/v1/oskardes/cldf15ih7009x01oergvp3gg1/tiles/256/{z}/{x}/{y}@2x?access_token=pk.***************************************",
                 additionalOptions: const {
                   "access_token":
-                      "pk.eyJ1Ijoib3NrYXJkZXMiLCJhIjoiY2xkZjEyMDNiMGZqdTNwcGlyZ3Q2eTcxMCJ9.XLYa3nxHUctCHolj0sVgDw"
+                      "pk.***************************************"
                 },
                 userAgentPackageName: 'com.oskardes.weatherApp',
               ),
